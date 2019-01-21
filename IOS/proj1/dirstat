@@ -1,0 +1,215 @@
+#!/bin/sh
+
+ # @brief First project (IOS)
+ #
+ # @category  School projects
+ # @author    Do Long Thanh
+ # @login     xdolon00
+ # @file      dirstat
+# 15/15
+ ##
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#---------------------------------------------------------------------------------------------
+# DIR je zkoumany adresar predany na prikazove radce pri spusteni skriptu.
+# V pripade, ze skriptu nebyl zadan adresar, je DIR aktualni pracovni adresar (cwd).
+# osetreni
+
+
+if [ "$1" = "-i" ]  && [ "$#" = 2 ]; then
+	# echo Spusten ignorovani souboru bez zadani adresy
+	DIR=$2
+
+
+elif [ "$1" = "-i" ]  && [ "$#" = 3 ]; then
+	# echo Spusten ignorovani souboru se zadanim adresy
+	IGN=$2
+	DIR=$3
+
+	if [ ! -d "$DIR" ]; then
+	>&2 printf 'Erorr: spatne zadana adresa.\n'
+	exit 1
+	fi
+
+elif [ "$#" = 1 ] && [ "$1" != "-i" ]; then
+	# echo Pouze zadaná adresa
+	IGN=$^
+	DIR=$1
+
+	if [ ! -d "$DIR" ]; then
+	# echo Spatne zadana adresa
+	>&2 printf 'Erorr: spatne zadana adresa.\n'
+	exit 1
+	fi
+
+elif [ "$#" = 0 ] || [ "$1" = "-i" ]; then
+	# echo Bez argumentu
+	IGN=$^
+	DIR=$(pwd)
+else
+	# echo Nepovoleny pocet argumentu
+	>&2 printf 'Error: nepovoleny pocet argumentu.\n'
+	exit 1
+fi
+
+
+find "${DIR}" -type f -print >/dev/null 2>&1
+if [ "$?" -ne 0 ];then
+	>&2 printf 'Erorr: vstup zakazan\n'
+	exit 1
+fi
+
+find "${DIR}" -type d -print >/dev/null 2>&1
+if [ "$?" -ne 0 ];then
+	>&2 printf 'Erorr: vstup zakazan\n'
+	exit 1
+fi
+
+
+#---------------------------------------------------------------------------------------------
+# ND (>0) je pocet adresaru v adresarovem stromu.
+# nl -v 0 -> vypocet od nuly, -s":" -> zakoncovat strednikem, -f1 -> vypisovat zleva ci zprava,
+# vypíše ze souboru 3. až 10. znak každého řádku (cut -c 3-10) 
+
+ND=$(find "${DIR}" -type d  | sed '/'"${IGN}"'/d'| nl -v 1 -s":"| tail -n 1| cut -f1 -d ":")
+
+#---------------------------------------------------------------------------------------------
+# DD (>0) je nejvetsi adresarova hloubka (prazdny korenovy adresar ma hloubku 1).
+DIR_number=$(($(echo "${DIR}"| sed "s/[^\/]//g" | sort -r -n | head -n 1 | wc -m)-1))
+DD_number=$(find "${DIR}" -type d | sed "s/[^\/]//g" | sort -r -n | head -n 1 | wc -m)
+DD=$((DD_number-DIR_number))
+
+#---------------------------------------------------------------------------------------------
+# NF (>=0) je pocet vsech obycejnych souboru.
+NF=$(find "${DIR}" -type f -not -regex '.*/${IGN}/.*' -not -path '*/${IGN}/*'  | sed '/'"${IGN}"'/d' | wc -l)
+
+
+#---------------------------------------------------------------------------------------------
+# AF (cele cislo) je aritmeticky prumer poctu obycejnych souboru v kazdem adresari.
+AF=$((NF/ND))
+
+
+#---------------------------------------------------------------------------------------------
+# LF (>0) je velikost nejvetsiho souboru. 
+# Pokud neexistuje zadny soubor s nenulovou velikosti, misto cisla LF a cesty se vypise 'N/A'.
+#TODO vyresit proble s  /etc/
+if [ "$NF" = 0 ]; then
+	LF="N/A"
+else
+	LF=$(find "${DIR}"  -type f -not -regex '.*/${IGN}/.*' -not -path '*/${IGN}/*'   -exec ls -l {} + | sed '/'"${IGN}"'/d' | awk '{print $5}' | sort -r -n| head -n 1)
+	if [ "$LF" = 0 ]; then
+	LF="N/A"
+	fi
+fi
+
+#---------------------------------------------------------------------------------------------
+# AS (cele cislo) je prumerna velikost souboru. 
+# Pokud je pocet souboru NF 0, vypise se misto cisla AS retezec N/A.
+
+all_files=$(find "${DIR}"  -type f -not -regex '.*/${IGN}/.*' -not -path '*/${IGN}/*'   -exec ls -l {} + | sed '/'"${IGN}"'/d' | awk '{print $5}' | awk '{s+=$1} END {print s}')
+
+if [ "$NF" -ne 0 ]; then
+	AS=$((all_files/NF))
+	else
+	AS="N/A"
+fi
+
+
+#---------------------------------------------------------------------------------------------
+# MS (cele cislo) je median velikosti souboru. 
+# Pokud je pocet souboru NF 0, vypise se misto cisla MS retezec N/A.
+	
+if [ "$NF" -ne 0 ]; then	
+	if [ $((NF%2)) -ne 0 ]; then
+
+		#Liché
+		middle=$(((NF+1)/2))
+		MS=$(find "${DIR}"  -type f -not -regex '.*/${IGN}/.*' -not -path '*/${IGN}/*'   -exec ls -l {} + | sed '/'"${IGN}"'/d' | awk '{print $5}' | sort -n | sed -n "${middle}p")
+	else
+		#Sudé
+		middle=$((NF/2))
+		x1=$(find "${DIR}"  -type f -not -regex '.*/${IGN}/.*' -not -path '*/${IGN}/*'   -exec ls -l {} + | sed '/'"${IGN}"'/d' | awk '{print $5}' | sort -n | sed -n "${middle}p")
+
+		middle=$(((NF/2)+1))
+		x2=$(find "${DIR}"  -type f -not -regex '.*/${IGN}/.*' -not -path '*/${IGN}/*'   -exec ls -l {} + | sed '/'"${IGN}"'/d' | awk '{print $5}' | sort -n | sed -n "${middle}p")
+		MS=$(((x1+x2)/2))
+
+	fi 
+else
+	MS="N/A"
+fi
+
+
+#---------------------------------------------------------------------------------------------
+# EL je carkou oddeleny, abecedne serazeny seznam pripon vsech obycejnych souboru. 
+# Necht pripona souboru je suffix nazvu souboru za znakem '.' (tecka) obsahujici pouze alfanumericke znaky.
+# EL=$(tr '\n' ',' <<< "$DEL" | sed 's/,$//')
+
+DEL=$(find "${DIR}" -type f | sed '/'"${IGN}"'/d' | sed "s/.*\/\.//g" | sed "s/.*\///g" | sed -n '/.*\..*/p'| awk -F . '{print $NF}' | grep '^[[:alnum:]]*$' | sort -u | uniq)
+EL=$(echo "${DEL}" | tr '\n' ',' | sed 's/,$//')
+
+#---------------------------------------------------------------------------------------------
+echo "Root directory:" $DIR
+echo "Directories:" $ND
+echo "Max depth:" $DD
+echo "Average no. of files:" $AF
+echo "All files:" $NF
+echo "  Largest file:" $LF
+echo "  Average file size:" $AS
+echo "  File size median:" $MS
+echo "File extensions:" $EL
+
+for ext in ${DEL}; do
+
+	#CAST: FILES & NUMBER OF FILES------------------------------------------------------------
+	# NEXT (>0) je pocet souboru s danou priponou.
+
+		NEXT=$(find "${DIR}" -type f -not -regex '.*/${IGN}/.*' -not -path '*/${IGN}/*'  -name "*.$ext" | sed '/'"${IGN}"'/d' | sed "s/.*\/\.//g" | sed "s/.*\///g" |  sed -n '/.*\..*/p' | wc -l)
+		echo "Files .$ext: ${NEXT##* }"
+
+	#CAST: LARGEST----------------------------------------------------------------------------
+	# LEXT (>=0) je velikost nejvetsiho souboru s danou priponou.
+
+		LEXT=$(find "${DIR}"  -type f -not -regex '.*/${IGN}/.*' -not -path '*/${IGN}/*' -name "*.$ext" -exec ls -l {} + | sed '/'"${IGN}"'/d' | awk '{print $5}' | sort -r -n | head -n 1)
+		if [ "$NF" = 0 ]; then
+			LF="N/A"
+		else
+			echo "  Largest file .$ext: "$LEXT
+		fi
+	#CAST: AVERAGE--------------------------------------------------------------------------	
+	# AEXT (cele cislo) je prumerna velikost souboru s danou priponou.	
+
+		AFILE=$(find "${DIR}"  -type f -not -regex '.*/${IGN}/.*' -not -path '*/${IGN}/*'  -name "*.$ext" -exec ls -l {} + | sed '/'"${IGN}"'/d' | awk '{print $9,$5}' | sed "s/.*\/\.//g" | sed "s/.*\///g" | sed -n '/.*\..*/p' | awk '{print $2}' | awk '{s+=$1} END {print s}')
+		AEXT=$((AFILE/NEXT))
+		echo "  Average file size .$ext: "$AEXT
+
+	#CAST: MEDIAN--------------------------------------------------------------------------	
+	# MEXT (cele cislo) je median velikosti souboru s danou priponou.
+
+	if [ "$NEXT" -ne 0 ]; then
+		if [ "$((NEXT%2))" -ne 0 ]; then
+			#Liché
+		middle=$(((NEXT+1)/2))
+		MEXT=$(find "${DIR}"  -type f -not -regex '.*/${IGN}/.*' -not -path '*/${IGN}/*'  -name "*.$ext" -exec ls -l {} + | sed '/'"${IGN}"'/d' | awk '{print $9,$5}' | sed "s/.*\/\.//g" | sed "s/.*\///g" | sed -n '/.*\..*/p' | awk '{print $2}' | sort -n | sed -n "${middle}p")
+	
+	else
+		#Sudé
+		middle=$((NEXT/2))
+		x1=$(find "${DIR}"  -type f -not -regex '.*/${IGN}/.*' -not -path '*/${IGN}/*'  -name "*.$ext" -exec ls -l {} + | sed '/'"${IGN}"'/d' | sed -n '/.*\..*/p' | awk '{print $9,$5}' | sed "s/.*\/\.//g" | sed "s/.*\///g" | sed -n '/.*\..*/p' | awk '{print $2}' | sort -n | sed -n "${middle}p")
+		
+		middle=$(((NEXT/2)+1))
+		x2=$(find "${DIR}"  -type f -not -regex '.*/${IGN}/.*' -not -path '*/${IGN}/*'  -name "*.$ext" -exec ls -l {} + | sed '/'"${IGN}"'/d' | sed -n '/.*\..*/p' | awk '{print $9,$5}' | sed "s/.*\/\.//g" | sed "s/.*\///g" | sed -n '/.*\..*/p' | awk '{print $2}' | sort -n | sed -n "${middle}p")
+
+		MEXT=$(((x1+x2)/2))
+
+		fi
+	else
+	MEXT="N/A"
+	fi
+
+	echo "  File size median .$ext: $MEXT"
+done
+
+exit 0
