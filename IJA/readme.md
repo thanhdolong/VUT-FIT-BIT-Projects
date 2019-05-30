@@ -3,8 +3,8 @@ Projekt: Hra Klondike (Solitaire)
 
 **Setup**:
 ~~~txt
-git clone https://github.com/peter2141/Solitaire-IJA
-cd Solitaire-IJA/solitaire
+git clone https://github.com/thanhdolong/VUT-FIT-BIT-Projects.git
+cd VUT-FIT-BIT-Projects/IJA
 ant dir
 ant compile
 ant run
