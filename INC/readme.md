@@ -8,9 +8,9 @@ There are two valid passwords:
 * `1607509153`
 
 ### Implementation
-Program is implemented as Final State Machine (FSM). FSM scheme is available [here](/inc/inc-proj1/zprava.pdf).
+Program is implemented as Final State Machine (FSM). FSM scheme is available [here](/INC/zprava.pdf).
 
-For more info check [zadani.pdf](/inc/inc-proj1/zadani.pdf).
+For more info check [zadani.pdf](/INC/zadani.pdf).
 
 ### Files
 - `fsm.vhd` - source code of FSM
