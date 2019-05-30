@@ -1,0 +1,62 @@
+{**
+ * @param string   $basePath web base path
+ * @param array    $flashes  flash messages
+ *}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+
+	<title>{ifset title}{include title|stripHtml} | {/ifset}IIS</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="Internetový obchod s pastelkami a skicáky">
+	<meta name="author" content="Do Long Thanh & Juraj Kubiš">
+	<link rel="stylesheet" href="{$basePath}/css/style.css">
+	<link rel="stylesheet" href="{$basePath}/css/bootstrap.css">
+    {block head}{/block}
+</head>
+
+<body>
+	<div id="wrap">
+		<div class="container">
+			{include content}
+		</div>
+		<div id="push"></div>
+	</div>
+
+	<div id="footer">
+		<div class="container">
+			<p class="muted credit">Made with ❤️ Do Long Thanh and Kubiš Juraj.</p>
+		</div>
+	</div>
+	{block scripts}
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+	<script src="https://nette.github.io/resources/js/netteForms.min.js"></script>
+	<script src="{$basePath}/js/bootstrap.js"></script>
+	<script src="{$basePath}/js/main.js"></script>
+	{/block}
+</body>
+</html>
+
+{define menu}
+	<ul class="nav nav-pills pull-right">
+		<li><a n:href="Homepage:default">🏡 Home</a></li>
+		<li><a n:href=":Admin:Sign:in">Admin page</a></li>
+		<li><a n:href="Productlist:default">Products list</a></li>
+        <li><a class="btn btn-default"  n:href="Order:default" role="button"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> {$countItems} Košík</a></li>
+		<li><a n:href="delete!">❌</a></li>
+	</ul>
+{/define}
+
+<style>
+	body {
+		padding-top: 30px;
+	}
+
+	.page-header {
+		margin-top: -15px;
+	}
+
+</style>

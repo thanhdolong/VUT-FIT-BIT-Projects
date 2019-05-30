@@ -1,0 +1,61 @@
+{block content}
+
+{snippet flashMessages}
+    <div n:foreach="$flashes as $flash" class="alert alert-{$flash->type} alert-dismissible">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        {$flash->message}
+    </div>
+{/snippet}
+<div class="container">
+    <div class="logform space">
+        <h1 n:block=title>Sign In</h1>
+        {* OR
+        <form n:name=signInForm class=form>
+            <p><input n:name=username size=20>
+            <p><input n:name=password>
+            <p><input n:name=send class="btn btn-default">
+        </form>
+
+        {* OR
+            <form n:name=signInForm class=form>
+                <p><label n:name=username>Username: <input n:name=username size=20></label>
+                <p><label n:name=password>Password: <input n:name=password></label>
+                <p><input n:name=send class="btn btn-default">
+            </form>
+
+        {* OR
+        {import '../components/form.latte'}
+        {include form signInForm}
+        *}
+
+
+        {control signInForm}
+
+
+    <p><a n:href="up">Don't have an account yet? Sign up.</a></p>
+    <p><a n:href=":Front:Homepage:default">Homepage.</a></p>
+
+
+    </div>
+    <div id="push"></div>
+</div>
+{block head}
+    <style type="text/css">
+        body {
+            padding-top: Opx;
+            padding-bottom: 40px;
+            background-color: #f5f5f5;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            font-size: 16px;
+            height: auto;
+            padding: 7px 9px;
+        }
+
+        footer{
+            text-align: center;
+        }
+    </style>
+{/block}

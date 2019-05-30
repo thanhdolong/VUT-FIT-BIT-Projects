@@ -1,0 +1,23 @@
+{* This is the welcome page, you can delete it *}
+
+{block content}
+    {include menu}
+	<div class="page-header">
+		<h3 n:block=title>Internetový obchod</h3>
+	</div>
+
+	<p class="lead">Cílem je vytvoření jednoduché aplikace pro internetový obchod s pastelkami a skicáky. Návštěvníci si mohou pomocí internetového rozhraní prohlížet veškerý sortiment obchodu.
+		<p>
+	<p>Pastelky mohou lišit podle typu (obyčejné, progresso, voskovky, ...) a délky, počtu pastelek v balení, atd. Skicáky se dělí podle gramáže, velikosti, počtu papírů, apod.
+		<p>
+	<p>Pokud má návštěvník zájem o určitý produkt/y, může si jej vybrat (vložením do nákupního košíku). U registrovaných zákazníků, kteří jsou do systému přihlášeni, zůstává informace o vybraném zboží v košíku uložena a při opětovném přihlášení znovu načtena.
+		<p>
+	<p>Zákazník si může zboží objednat po zadání potřebných údajů (kontakt, doprava, ...). Zákazníci mohou jednotlivé zboží hodnotit a psát na něj recenze.
+		<p>
+	<p>V systému jsou uloženy také základní údaje o dodavatelích pro opětovné přiobjednání dalšího zboží. Zaměstnanci mohou nahlédnout do statistik oblíbenosti a prodejnosti zboží.</p>
+{/block}
+
+{block scripts}
+{include parent}
+<script src="https://files.nette.org/sandbox/jush.js"></script>
+{/block}

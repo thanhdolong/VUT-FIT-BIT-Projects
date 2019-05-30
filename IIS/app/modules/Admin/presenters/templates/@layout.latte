@@ -1,0 +1,76 @@
+{**
+ * @param string   $basePath web base path
+ * @param array    $flashes  flash messages
+ *}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>{ifset title}{include title|stripHtml} | {/ifset}IIS</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="Internetový obchod s pastelkami a skicáky">
+	<meta name="author" content="Do Long Thanh & Juraj Kubiš">
+	<link rel="stylesheet" href="{$basePath}/css/style.css">
+	<link rel="stylesheet" href="{$basePath}/css/bootstrap.css">
+    {block head}{/block}
+</head>
+
+<body>
+        {include content}
+
+<footer>
+	<div class="container">
+		<p class="muted credit">Made with ❤️ Do Long Thanh and Kubiš Juraj.</p>
+	</div>
+</footer>
+{block scripts}
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://nette.github.io/resources/js/netteForms.min.js"></script>
+
+	<script src="{$basePath}/js/main.js"></script>
+	<script src="{$basePath}/js/bootstrap.min.js"></script>
+{/block}
+</body>
+</html>
+
+{define menu}
+	<div class="col-sm-3 col-md-2 sidebar">
+    {if $user->isInRole('registered')}
+		<ul class="nav nav-sidebar">
+			<li><a href="">My Orders</a></li>
+			<li><a href="">Account Settings</a></li>
+		</ul>
+    {else}
+		<ul class="nav nav-sidebar">
+			<li><a n:href=":Front:Homepage:default">Homepage<span class="sr-only">(current)</span></a></li>
+			<li n:class="$presenter->isLinkCurrent('Homepage:default') ? active"><a n:href="Homepage:default">Overview <span class="sr-only">(current)</span></a></li>
+			<li n:class="$presenter->isLinkCurrent('Products:default') ? active"><a n:href="Products:default">Products</a></li>
+			<li n:class="$presenter->isLinkCurrent('Suplier:default') ? active"><a n:href="Suplier:default">Suplier</a></li>
+		</ul>
+    {/if}
+	</div>
+{/define}
+
+{define navbar}
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="Homepage:default">IIS - internetový obchod</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>Logged in as {$username}</li>
+                    <li><a n:href="Sign:out">Log out</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+{/define}

@@ -1,0 +1,37 @@
+#
+# WARNING: it is CRITICAL that this file & directory are NOT accessible directly via a web browser!
+# https://nette.org/security-warning
+#
+parameters:
+
+
+application:
+	errorPresenter: Front:Error
+	mapping:
+		*: App\*\Presenters\*Presenter
+
+
+session:
+	expiration: 14 days
+
+
+database:
+	dsn: 'mysql:host=localhost;dbname=IIS'
+	user: root
+	password: root
+	options:
+		lazy: yes
+
+
+services:
+	- App\Model\UserManager
+	- App\Model\ProductFacade
+	- App\Model\AuthorizatorFactory::create
+
+	- App\Admin\Forms\FormFactory
+	- App\Admin\Forms\SignInFormFactory
+	- App\Admin\Forms\SignUpFormFactory
+
+	- App\Front\Forms\FormFactory
+	- App\Front\Forms\commentFormFactory
+	router: App\RouterFactory::createRouter

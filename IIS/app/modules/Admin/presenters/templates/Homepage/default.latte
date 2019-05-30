@@ -1,0 +1,169 @@
+{* This is the welcome page, you can delete it *}
+
+{block content}
+    {*
+    {if $user->isLoggedIn()}
+		<a n:href="Sign:out">Log out</a>
+    {else}
+		<a n:href="Sign:in">Log in</a>
+    {/if}
+    *}
+    <div class="row">
+    {include navbar}
+
+    <div class="container-fluid">
+            {include menu}
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                <h1 class="page-header">Dashboard</h1>
+
+                    {snippet flashMessages}
+                        <div n:foreach="$flashes as $flash" class="alert alert-{$flash->type} alert-dismissible">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            {$flash->message}
+                        </div>
+                    {/snippet}
+
+                    {foreach $user->getIdentity()->getRoles() as $row}
+                    <span>{$row}</span>
+                    {/foreach}
+
+                    {php echo"----".$checkrole}
+
+
+            </div>
+        </div>
+    </div>
+{/block}
+
+{block scripts}
+    {include parent}
+	<script src="https://files.nette.org/sandbox/jush.js"></script>
+	<script>
+        jush.create_links = false;
+        jush.highlight_tag('code');
+        $('code.jush').each(function(){ $(this).html($(this).html().replace(/\x7B[/$\w].*?\}/g, '<span class="jush-latte">$&</span>')) });
+
+        $('a[href^="#"]').click(function(){
+            $('html,body').animate({ scrollTop: $($(this).attr('href')).show().offset().top - 5 }, 'fast');
+            return false;
+        });
+	</script>
+{/block}
+
+{block head}
+    <style>
+          /*
+           * Base structure
+           */
+
+          /* Move down content because we have a fixed navbar that is 50px tall */
+        body {
+          padding-top: 50px;
+        }
+
+
+        /*
+         * Global add-ons
+         */
+
+        .sub-header {
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        /*
+         * Top navigation
+         * Hide default border to remove 1px line.
+         */
+        .navbar-fixed-top {
+            border: 0;
+        }
+
+        .navbar-nav > li > a {
+          padding-top: 0px;
+        }
+        /*
+         * Sidebar
+         */
+
+        /* Hide for mobile, show later */
+        .sidebar {
+            display: none;
+        }
+        @media (min-width: 768px) {
+            .sidebar {
+                position: fixed;
+                top: 51px;
+                bottom: 0;
+                left: 0;
+                z-index: 1000;
+                display: block;
+                padding: 20px;
+                overflow-x: hidden;
+                overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+                background-color: #f5f5f5;
+                border-right: 1px solid #eee;
+            }
+        }
+
+        /* Sidebar navigation */
+        .nav-sidebar {
+            margin-right: -21px; /* 20px padding + 1px border */
+            margin-bottom: 20px;
+            margin-left: -20px;
+        }
+        .nav-sidebar > li > a {
+            padding-right: 20px;
+            padding-left: 20px;
+        }
+        .navbar-right > li {
+            margin-top: 15px;
+            color: #9d9d9d;
+        }
+
+        .nav-sidebar > .active > a,
+        .nav-sidebar > .active > a:hover,
+        .nav-sidebar > .active > a:focus {
+            color: #fff;
+            background-color: #428bca;
+        }
+
+
+        /*
+         * Main content
+         */
+
+        .main {
+            padding: 20px;
+        }
+        @media (min-width: 768px) {
+            .main {
+                padding-right: 40px;
+                padding-left: 40px;
+            }
+        }
+        .main .page-header {
+            margin-top: 0;
+        }
+
+
+        /*
+         * Placeholder dashboard ideas
+         */
+
+        .placeholders {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .placeholders h4 {
+            margin-bottom: 0;
+        }
+        .placeholder {
+            margin-bottom: 20px;
+        }
+        .placeholder img {
+            display: inline-block;
+            border-radius: 50%;
+        }
+    </style>
+{/block}

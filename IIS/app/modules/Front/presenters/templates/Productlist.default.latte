@@ -1,0 +1,18 @@
+{* This is the welcome page, you can delete it *}
+
+{block content}
+    {include menu}
+    <div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
+    <div class="page-header">
+        <h3 n:block=title>Internetový obchod</h3>
+    </div>
+
+    <article n:foreach="$items as $item">
+        <h3><a n:href=":Front:ProductDetail: $item->cisloproduktu_id">{$item->nazov|truncate:80}</a></h3>
+    </article>
+{/block}
+
+{block scripts}
+    {include parent}
+    <script src="https://files.nette.org/sandbox/jush.js"></script>
+{/block}

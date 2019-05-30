@@ -1,0 +1,43 @@
+{* This is the welcome page, you can delete it *}
+
+{block content}
+    {include menu}
+
+    <div class="page-header">
+        <h3 n:block=title>Internetový obchod</h3>
+    </div>
+        <H1>{$product->nazov}</H1>
+    <p>Cena:        {$product->cena} CZK</p>
+    <p>Počet kusů:  {$product->pocet_ks} Ks</p>
+    {if $detailpastelek}
+        <p>Počet v balení: {$detailpastelek->pocet_v_baleni}</p>
+        <p>Délka: {$detailpastelek->dlzka}</p>
+        <p>Typ: {$detailpastelek->typ}</p>
+    {else}
+        <p>Počet v balení: {$detailskicar->gramaz}</p>
+        <p>Délka: {$detailskicar->format_skicaru}</p>
+        <p>Typ: {$detailskicar->pocet_papierov}</p>
+    {/if}
+
+    <a n:href="AddToCart! productId => $product->cisloproduktu_id"><button type="button" class="btn btn-success"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> Koupit</button></a>
+    {if $user->isLoggedIn()}
+        <h2>Vložte nový příspěvek</h2>
+        {control commentForm}
+    {/if}
+    <h2>Komentáře</h2>
+
+    <div class="comments">
+        {foreach $comments as $comment}
+            <p><b>{$comment->username}</b> napsal, {$comment->created_at|date:'%d.%m.%Y %H:%m'}</p>
+            <div>{$comment->content}</div>
+            <hr>
+        {/foreach}
+    </div>
+
+
+{/block}
+
+{block scripts}
+    {include parent}
+    <script src="https://files.nette.org/sandbox/jush.js"></script>
+{/block}

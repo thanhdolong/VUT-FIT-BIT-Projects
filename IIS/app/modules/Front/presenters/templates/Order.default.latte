@@ -1,0 +1,78 @@
+{* This is the welcome page, you can delete it *}
+
+{block content}
+    {include menu}
+    <div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
+    <div class="page-header">
+        <h3 n:block=title>Internetový obchod</h3>
+    </div>
+
+    <table class="table table-striped table-hover table-responsive">
+        <thead>
+        <tr>
+            <th>
+                Název produktu
+            </th>
+            <th>
+                ks
+            </th>
+            <th>
+                Cena/kus
+            </th>
+            <th>
+                Cena celkem
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>
+                Xiaomi Redmi 4A Global 2GB/32GB Black CZ LTE
+            </td>
+            <td>
+                [CONTENT]
+            </td>
+            <td>
+                [CONTENT]
+            </td>
+            <td>
+                [CONTENT]
+            </td>
+        </tr>
+        <tr>
+            <td>
+                [CONTENT]
+            </td>
+            <td>
+                [CONTENT]
+            </td>
+            <td>
+                [CONTENT]
+            </td>
+            <td>
+                [CONTENT]
+            </td>
+        </tr>
+        <tr>
+            <td>
+                [CONTENT]
+            </td>
+            <td>
+                [CONTENT]
+            </td>
+            <td>
+                [CONTENT]
+            </td>
+            <td>
+                [CONTENT]
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+{/block}
+
+{block scripts}
+    {include parent}
+    <script src="https://files.nette.org/sandbox/jush.js"></script>
+{/block}
