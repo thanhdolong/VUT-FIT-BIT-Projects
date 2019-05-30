@@ -10,7 +10,7 @@ There are two valid passwords:
 ### Implementation
 Program is implemented as Final State Machine (FSM). FSM scheme is available [here](/INC/zprava.pdf).
 
-For more info check [zadani.pdf](/INC/zadani.pdf).
+For more info check [zadani.pdf](/INC/projects/zadani.pdf).
 
 ### Files
 - `fsm.vhd` - source code of FSM
