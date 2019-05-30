@@ -1,17 +1,22 @@
-ISA Project - Network service application
+# ISA Project - Network service application
+
 Variant: LDAP server
+
 Author: Do Long Thanh <xdolon00@stud.fit.vutbr.cz>
 
 Usage: myldap {-p <port>} -f <soubor>
+    
 Example: ./myldap -p 3042 -f ldap.csv
 
 [-p] - optional attribute - port number of the host to connect (default value is 389)
+
 [-f] - required attribute - file path to database
 
 List of files in archive:
+
     README
-    manual.pdf
-    Makefile
+    manual.pdf  
+    Makefile 
     main.cpp
     tools.cpp
     tools.h
